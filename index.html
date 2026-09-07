@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jingjing Xie</title>
+<meta name="description" content="Jingjing Xie — PhD student at CUHK-MMLab. Research on multimodal LLMs, GUI/computer-use agents, and efficient model adaptation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --fg:#1a1a1a; --muted:#6b6b6b; --line:#e6e6e6;
+    --accent:#0b5cad; --accent-soft:#eef4fb; --card:#fafafa; --tag:#f0f0f0;
+    --maxw:940px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#111315; --fg:#e9e9e9; --muted:#9a9a9a; --line:#2a2d30;
+      --accent:#6ab0f3; --accent-soft:#182430; --card:#181a1c; --tag:#22262a;
+    }
+  }
+  html[data-theme="light"]{
+    --bg:#ffffff; --fg:#1a1a1a; --muted:#6b6b6b; --line:#e6e6e6;
+    --accent:#0b5cad; --accent-soft:#eef4fb; --card:#fafafa; --tag:#f0f0f0;
+  }
+  html[data-theme="dark"]{
+    --bg:#111315; --fg:#e9e9e9; --muted:#9a9a9a; --line:#2a2d30;
+    --accent:#6ab0f3; --accent-soft:#182430; --card:#181a1c; --tag:#22262a;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--fg);
+    font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    line-height:1.5; font-size:15px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:44px 32px 56px}
+  a{color:var(--accent); text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* Header */
+  header{display:flex; gap:32px; align-items:center; flex-wrap:wrap; justify-content:space-between}
+  .avatar{
+    width:96px; height:96px; border-radius:50%; object-fit:cover;
+    border:1px solid var(--line); flex-shrink:0;
+  }
+  .intro{min-width:240px}
+  h1{
+    font-family:"Newsreader",Georgia,serif; font-weight:600;
+    font-size:1.85rem; margin:0 0 2px; letter-spacing:-.01em;
+  }
+  .role{color:var(--muted); font-size:.95rem; margin:0 0 9px}
+  .links{display:flex; flex-wrap:wrap; gap:6px 14px; font-size:.88rem}
+  .links a{display:inline-flex; align-items:center; gap:5px; color:var(--fg)}
+  .links a:hover{color:var(--accent)}
+  .links .wechat{position:relative; display:inline-flex; align-items:center; gap:5px; color:var(--fg); cursor:help}
+  .links .wechat::after{
+    content:attr(data-tip); position:absolute; left:0; top:calc(100% + 7px);
+    white-space:nowrap; background:var(--fg); color:var(--bg);
+    font-size:.78rem; padding:5px 9px; border-radius:6px;
+    opacity:0; visibility:hidden; transition:opacity .15s ease; z-index:5;
+    box-shadow:0 2px 10px rgba(0,0,0,.18);
+  }
+  .links .wechat:hover::after{opacity:1; visibility:visible}
+  .links svg{width:15px; height:15px; fill:currentColor}
+
+  /* Section */
+  section{margin-top:44px}
+  .cols{display:grid; grid-template-columns:1fr 1fr; gap:0 40px; align-items:start}
+  .cols section{margin-top:44px}
+  .cols.about-row{grid-template-columns:1fr 1.35fr; align-items:start; margin-top:44px}
+  .cols.about-row > section{margin-top:0}
+  .photo{width:100%; border-radius:10px; border:1px solid var(--line); display:block; object-fit:cover; margin-top:5px}
+  .about-row .intro-photo{margin-top:28px}
+  h2{
+    font-family:"Newsreader",Georgia,serif; font-weight:600;
+    font-size:1.25rem; margin:0 0 14px; padding-bottom:5px;
+    border-bottom:1px solid var(--line);
+  }
+  h3{
+    font-family:"Newsreader",Georgia,serif; font-weight:600;
+    font-size:1rem; margin:22px 0 8px; color:var(--muted);
+  }
+  #publications h3{
+    color:var(--accent); font-size:1.02rem; margin:24px 0 6px;
+  }
+  #publications h3.first{margin-top:16px}
+
+  /* Collapsible publication groups */
+  details.pubgroup{margin-top:20px}
+  details.pubgroup.first{margin-top:12px}
+  details.pubgroup summary{
+    font-family:"Newsreader",Georgia,serif; font-weight:600;
+    font-size:1.02rem; color:var(--accent); cursor:pointer;
+    list-style:none; display:flex; align-items:center; gap:7px;
+    padding:2px 0; user-select:none;
+  }
+  details.pubgroup summary::-webkit-details-marker{display:none}
+  details.pubgroup summary::before{
+    content:""; width:6px; height:6px; border-right:2px solid var(--accent);
+    border-bottom:2px solid var(--accent); transform:rotate(-45deg);
+    transition:transform .18s ease; flex-shrink:0; margin-top:-2px;
+  }
+  details.pubgroup[open] summary::before{transform:rotate(45deg); margin-top:-4px}
+  details.pubgroup summary:hover{text-decoration:underline}
+  details.pubgroup .pub:first-of-type{padding-top:10px}
+
+  p{margin:0 0 9px}
+  #about p:last-child{margin-bottom:0}
+
+  /* Philosophy block */
+  .philosophy{margin-top:14px; padding:12px 16px; background:var(--card);
+    border-left:3px solid var(--accent); border-radius:0 6px 6px 0; font-size:.9rem}
+  .philosophy .ph-title{font-weight:600; margin-bottom:6px}
+  .philosophy ul{margin:0; padding-left:18px; color:var(--muted)}
+  .philosophy ul li{margin-bottom:3px}
+
+  /* Pull quote (right side of header) */
+  .quote{flex:1; min-width:260px; max-width:420px; margin:0; text-align:right}
+  .quote p{font-family:"Newsreader",Georgia,serif; font-style:italic;
+    font-size:1rem; line-height:1.5; color:var(--fg); margin:0 0 6px}
+  .quote cite{font-style:normal; font-size:.82rem; color:var(--muted)}
+
+  /* News */
+  .news{list-style:none; margin:0; padding:0; font-size:.9rem}
+  .news li{display:flex; gap:14px; padding:4px 0}
+  .news .date{color:var(--muted); flex-shrink:0; width:72px; font-variant-numeric:tabular-nums}
+  details.earlier{margin-top:2px}
+  details.earlier summary{
+    font-size:.85rem; color:var(--muted); cursor:pointer; list-style:none;
+    display:inline-flex; align-items:center; gap:6px; padding:4px 0; user-select:none;
+  }
+  details.earlier summary::-webkit-details-marker{display:none}
+  details.earlier summary::before{
+    content:""; width:5px; height:5px; border-right:1.5px solid var(--muted);
+    border-bottom:1.5px solid var(--muted); transform:rotate(-45deg);
+    transition:transform .18s ease; flex-shrink:0; margin-top:-1px;
+  }
+  details.earlier[open] summary::before{transform:rotate(45deg); margin-top:-3px}
+  details.earlier summary:hover{color:var(--accent); text-decoration:underline}
+  details.earlier .news{margin-top:2px}
+
+  /* Publications */
+  .pub{
+    display:flex; gap:14px; padding:13px 0; border-bottom:1px solid var(--line);
+  }
+  .pub:last-child{border-bottom:none}
+  .pub .venue{
+    flex-shrink:0; width:84px; text-align:center;
+  }
+  .badge{
+    display:inline-block; font-size:.68rem; font-weight:600; letter-spacing:.02em;
+    padding:3px 7px; border-radius:5px; background:var(--accent-soft); color:var(--accent);
+    white-space:nowrap; line-height:1.25;
+  }
+  .badge.oral{background:var(--accent); color:#fff}
+  .pub .body{flex:1}
+  .pub .title{font-weight:600; color:var(--fg); margin-bottom:1px; font-size:.95rem}
+  .pub .title .code{
+    font-weight:500; font-size:.78rem; margin-left:8px; white-space:nowrap;
+    vertical-align:1px;
+  }
+  .pub .authors{font-size:.85rem; color:var(--muted)}
+  .pub .authors .me{color:var(--fg); font-weight:600}
+  .pub .desc{font-size:.85rem; color:var(--muted); margin-top:3px}
+  .star{color:var(--muted); font-size:.82rem}
+
+  /* Experience / Education */
+  .entry{display:flex; gap:14px; padding:11px 0}
+  .entry .when{flex-shrink:0; width:100px; color:var(--muted); font-size:.84rem; font-variant-numeric:tabular-nums}
+  .entry .what{flex:1}
+  .entry .what .org{font-weight:600; font-size:.95rem}
+  .entry .what .sub{font-size:.87rem; color:var(--muted)}
+  .entry .what ul{margin:4px 0 0; padding-left:17px; font-size:.85rem; color:var(--muted)}
+  .entry .what ul li{margin-bottom:2px}
+
+  /* Theme toggle */
+  .toggle{
+    position:fixed; top:18px; right:18px; width:38px; height:38px;
+    border:1px solid var(--line); background:var(--card); color:var(--fg);
+    border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .toggle:hover{border-color:var(--accent)}
+  .toggle svg{width:18px; height:18px; fill:currentColor}
+
+  footer{margin-top:40px; padding-top:14px; border-top:1px solid var(--line);
+    color:var(--muted); font-size:.82rem; text-align:center}
+
+  @media (max-width:640px){
+    .cols{grid-template-columns:1fr; gap:0}
+    .cols section:last-child{margin-top:30px}
+  }
+  @media (max-width:520px){
+    .wrap{padding:40px 20px 72px}
+    .pub{flex-direction:column; gap:6px}
+    .pub .venue{width:auto; text-align:left}
+    .entry{flex-direction:column; gap:4px}
+    .entry .when{width:auto}
+  }
+</style>
+</head>
+<body>
+<button class="toggle" id="themeToggle" aria-label="Toggle theme"></button>
+<div class="wrap">
+
+  <!-- ============ HEADER ============ -->
+  <header>
+    <div class="intro">
+      <h1>Jingjing Xie <span style="font-family:'Newsreader';font-weight:400;color:var(--muted);font-size:1.1rem">谢晶晶</span></h1>
+      <p class="role">First-Year PhD Student · <a href="https://mmlab.ie.cuhk.edu.hk/" target="_blank" rel="noopener">CUHK-MMLab</a></p>
+      <div class="links">
+        <a href="mailto:x1105120355@gmail.com">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5z"/></svg>
+          Email
+        </a>
+        <a href="https://scholar.google.com/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5l4.84 3.77A8 8 0 0 1 12 9a8 8 0 0 1 7.16 4.27L24 9.5z"/></svg>
+          Scholar
+        </a>
+        <a href="https://github.com/xjjxmu" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.3-1.8-1.3-1.8-1-.7.1-.7.1-.7 1.2 0 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.3-3.1-.2-.4-.6-1.6 0-3.2 0 0 1-.3 3.4 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8 0 3.2.9.8 1.3 1.9 1.3 3.1 0 4.6-2.8 5.6-5.5 5.9.5.4.9 1.1.9 2.3v3.3c0 .3.1.7.8.6A12 12 0 0 0 12 .3z"/></svg>
+          GitHub
+        </a>
+        <a href="https://www.zhihu.com/people/rachel-38-60-48/posts" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><path d="M5.7 3h12.6A2.7 2.7 0 0 1 21 5.7v12.6a2.7 2.7 0 0 1-2.7 2.7H5.7A2.7 2.7 0 0 1 3 18.3V5.7A2.7 2.7 0 0 1 5.7 3zm7 5.3h-1.9c.1-.9.1-1.7.1-2.4H9.3c0 .7 0 1.5-.1 2.4H7.4l.4 1.4h1.3c-.2 1.4-.6 2.8-1.6 4l.9 1.3c1-1.3 1.5-2.7 1.8-4.1l1.9 2.2.7-1.5-2.2-2h1.3zm4.4 0h-3.3v7.9h1.4v-1h1.4l.6 1.4 1.2-.6-1-2V8.3z"/></svg>
+          Zhihu
+        </a>
+        <span class="wechat" data-tip="ownerEli （添加请注明来意）">
+          <svg viewBox="0 0 24 24"><path d="M8.7 3C4.4 3 1 5.9 1 9.4c0 2 1.1 3.8 2.9 5L3 17.2l2.9-1.5c.9.3 1.8.4 2.8.4h.6a5 5 0 0 1-.2-1.4c0-3.2 3-5.8 6.8-5.8h.6C15.9 5.3 12.7 3 8.7 3zM6.2 8.1a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm5 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM23 14.7c0-2.9-2.8-5.2-6.2-5.2s-6.2 2.3-6.2 5.2 2.8 5.2 6.2 5.2c.7 0 1.4-.1 2.1-.3l2.3 1.2-.6-2a5 5 0 0 0 2.4-4.1zm-8.2-1a.8.8 0 1 1 0-1.6.8.8 0 0 1 0 1.6zm4 0a.8.8 0 1 1 0-1.6.8.8 0 0 1 0 1.6z"/></svg>
+          WeChat
+        </span>
+      </div>
+    </div>
+    <!-- ============ QUOTE ============ -->
+    <blockquote class="quote">
+      <p>"And don't worry about losing. If it is right, it happens — the main thing is not to hurry. Nothing good gets away."</p>
+      <cite>— John Ernst Steinbeck</cite>
+    </blockquote>
+  </header>
+
+  <!-- ============ PHOTO + ABOUT (two columns) ============ -->
+  <div class="cols about-row">
+  <div class="intro-photo">
+    <img class="photo" src="photo.jpg" alt="Jingjing Xie">
+    <div class="philosophy">
+      <div class="ph-title">Two principles I believe in</div>
+      <ul>
+        <li>The speed and correctness of experiments determine how fast both people and models evolve.</li>
+        <li>Research means focusing on the most bottlenecking problem — bold hypotheses, humbly taking others' advice, analyzing from every angle, and iterating fast.</li>
+      </ul>
+    </div>
+  </div>
+  <section id="about">
+    <h2>About</h2>
+    <p>I am a first-year PhD student at the Chinese University of Hong Kong,
+       supervised by <a href="https://xyue.io/" target="_blank" rel="noopener">Prof. Xiangyu Yue</a> at <a href="https://mmlab.ie.cuhk.edu.hk/" target="_blank" rel="noopener">MMLab@CUHK</a>. Before CUHK, I received my master's degree from <a href="https://mac.xmu.edu.cn/" target="_blank" rel="noopener">MAC@XMU</a>, led by <a href="https://mac.xmu.edu.cn/rrji/" target="_blank" rel="noopener">Prof. Rongrong Ji</a>.</p>
+    <p>My research began in model compression and acceleration, where I led several papers. In 2024, I joined the <strong><a href="https://github.com/OpenGVLab/InternVL" target="_blank" rel="noopener">InternVL</a></strong> group to work on the computer-use capabilities of multimodal foundation models and the scaling properties of computer-use agents — sharpening my understanding of data scaling and why it matters. In 2025, I joined <strong><a href="https://github.com/stepfun-ai" target="_blank" rel="noopener">StepFun</a></strong> to explore more general reasoning and agentic capabilities beyond computer-use — such as game playing, tool use, and long-horizon coding. Contributing across the various stages of model training and RL infrastructure there deepened my understanding of the foundation-model system as a whole.</p>
+    <p>I truly enjoy meeting new people and exploring unexpected paths. If my work speaks to you, or if you see a way we could create something together, drop me a line — I'd genuinely love to hear from you.</p>
+  </section>
+  </div>
+
+  <!-- ============ NEWS ============ -->
+  <section id="news">
+    <h2>News</h2>
+    <ul class="news">
+      <li><span class="date">2026</span><span>Named an <strong>Outstanding Graduate Student</strong> by Xiamen University.</span></li>
+      <li><span class="date">2026.05</span><span><strong>Step 3.7 Flash</strong>: A High-Efficiency Flash Model for Real-World Agents. <a href="https://static.stepfun.com/blog/step-3.7-flash/" target="_blank" rel="noopener">Released</a>.</span></li>
+      <li><span class="date">2026.02</span><span><strong>OS-Oracle</strong>: A Comprehensive Framework for Cross-Platform GUI Critic Models. Accepted to <strong>CVPR 2026</strong>.</span></li>
+      <li><span class="date">2026.02</span><span><strong>MMBench-GUI</strong>: Hierarchical Multi-Platform Evaluation Framework for GUI Agents. Accepted to <strong>CVPR 2026</strong>.</span></li>
+      <li><span class="date">2026.01</span><span><strong>ScaleCUA</strong>: Scaling Open-Source Computer Use Agents with Cross-Platform Data. Accepted to <strong>ICLR 2026</strong> (Oral).</span></li>
+      <li><span class="date">2026.01</span><span><strong>Step 3.5 Flash</strong>: Open Frontier-Level Intelligence with 11B Active Parameters. <a href="https://github.com/stepfun-ai/Step-3.5-Flash" target="_blank" rel="noopener">Released</a>.</span></li>
+      <li><span class="date">2026.01</span><span><strong>Step3-VL-10B</strong>: A Compact yet Frontier Multimodal Model. <a href="https://github.com/stepfun-ai/Step3-VL-10B" target="_blank" rel="noopener">Released</a>.</span></li>
+      <li><span class="date">2025.12</span><span><strong>Step-GUI</strong>: A Family of Multimodal Models for GUI Automation. Released on <a href="https://arxiv.org/abs/2512.15431" target="_blank" rel="noopener">arXiv</a>.</span></li>
+      <li><span class="date">2025.11</span><span><strong>WMAct</strong>: Thinking by Doing — Building Efficient World Model Reasoning in LLMs. Released on <a href="https://arxiv.org/abs/2511.23476" target="_blank" rel="noopener">arXiv</a>.</span></li>
+      <li><span class="date">2025.08</span><span><strong>InternVL3.5</strong>: Advancing Open-Source Multimodal Models in Versatility, Reasoning, and Efficiency. Released on <a href="https://arxiv.org/abs/2508.18265" target="_blank" rel="noopener">arXiv</a>.</span></li>
+      <li><span class="date">2025.05</span><span><strong>GS-Bias</strong>: Global-Spatial Bias Learner for Test-Time Adaptation of VLMs. Accepted to <strong>ICML 2025</strong>.</span></li>
+      <li><span class="date">2025</span><span>Awarded the <strong>BYD Scholarship</strong> (比亚迪奖学金).</span></li>
+      <li><span class="date">2024.12</span><span><strong>TextRefiner</strong>: Internal Visual Feature as Efficient Refiner for VLM Prompt Tuning. Accepted to <strong>AAAI 2025</strong>.</span></li>
+      <li><span class="date">2024</span><span>Awarded the <strong>National Scholarship</strong> (国家奖学金) by the Ministry of Education of China.</span></li>
+      <li><span class="date">2024.07</span><span><strong>QSLAW</strong>: Quantization-Aware Scale Learning for Efficient Multimodal LLM Adaptation. Accepted to <strong>ACM MM 2024</strong>.</span></li>
+      <li><span class="date">2024.02</span><span><strong>UniPTS</strong>: A Unified Framework for Proficient Post-Training Sparsity. Accepted to <strong>CVPR 2024</strong>.</span></li>
+    </ul>
+  </section>
+
+  <!-- ============ PUBLICATIONS ============ -->
+  <section id="publications">
+    <h2>Some Works</h2>
+
+    <details class="pubgroup first" open>
+    <summary>Foundation Models</summary>
+
+    <div class="pub">
+      <div class="venue"><span class="badge">Model Blog<br>2026</span></div>
+      <div class="body">
+        <div class="title">Step 3.7 Flash: A High-Efficiency Flash Model for Real-World Agents<a class="code" href="https://static.stepfun.com/blog/step-3.7-flash/" target="_blank" rel="noopener">[Blog]</a></div>
+        <span class="authors">Step 3.7 Group</span>
+        <div class="desc">A high-efficiency multimodal agent model (196B total / 11B active, plus a 1.8B ViT) built for real-world agentic tasks — coding, tool use, web / visual search, and GUI operation.</div>
+      </div>
+    </div>
+
+    <div class="pub">
+      <div class="venue"><span class="badge">Tech Report<br>2025</span></div>
+      <div class="body">
+        <div class="title">Step 3.5 Flash: Open Frontier-Level Intelligence with 11B Active Parameters<a class="code" href="https://github.com/stepfun-ai/Step-3.5-Flash" target="_blank" rel="noopener">[GitHub]</a></div>
+        <span class="authors">Step 3.5 Group</span>
+        <div class="desc">A frontier-level open model delivering strong intelligence with only 11B active parameters.</div>
+      </div>
+    </div>
+
+    <div class="pub">
+      <div class="venue"><span class="badge">Tech Report<br>2025</span></div>
+      <div class="body">
+        <div class="title">Step3-VL-10B Technical Report<a class="code" href="https://github.com/stepfun-ai/Step3-VL-10B" target="_blank" rel="noopener">[GitHub]</a></div>
+        <span class="authors">Step3-VL Group</span>
+        <div class="desc">A 10B vision-language foundation model from the Step series.</div>
+      </div>
+    </div>
+
+    <div class="pub">
+      <div class="venue"><span class="badge">Tech Report<br>2025</span></div>
+      <div class="body">
+        <div class="title">InternVL3.5: Advancing Open-Source Multimodal Models in Versatility, Reasoning, and Efficiency<a class="code" href="https://github.com/OpenGVLab/InternVL" target="_blank" rel="noopener">[GitHub]</a></div>
+        <span class="authors">InternVL Group</span>
+        <div class="desc">An open-source multimodal foundation model advancing versatility, reasoning, and efficiency.</div>
+      </div>
+    </div>
+    </details>
+
+    <details class="pubgroup" open>
+    <summary>Agents</summary>
+
+    <div class="pub">
+      <div class="venue"><span class="badge">arXiv 2025</span></div>
+      <div class="body">
+        <div class="title">Thinking by Doing: Building Efficient World Model Reasoning in LLMs via Multi-turn Interaction<a class="code" href="https://arxiv.org/abs/2511.23476" target="_blank" rel="noopener">[arXiv]</a></div>
+        <span class="authors"><span class="me">Jingjing Xie*</span>, Yan Cai*, Jianjian Sun, Chunrui Han, En Yu, Liang Zhao, Jingcheng Hu, Yinmin Zhang, Haoran Lv, Yuang Peng, Zheng Ge, Xiangyu Zhang, Daxin Jiang, Xiangyu Yue</span>
+        <div class="desc">Introduces WMAct, internalizing a world model in LLMs via efficient multi-turn interaction — using reward rescaling and interaction-frequency annealing so multi-turn tasks can be solved in a single turn.</div>
+      </div>
+    </div>
+
+    <div class="pub">
+      <div class="venue"><span class="badge oral">ICLR 2026<br>Oral</span></div>
+      <div class="body">
+        <div class="title">ScaleCUA: Scaling Open-Source Computer Use Agents with Cross-Platform Data<a class="code" href="https://github.com/OpenGVLab/ScaleCUA" target="_blank" rel="noopener">[Code]</a></div>
+        <span class="authors">Zhaoyang Liu*, <span class="me">Jingjing Xie*</span>, et al.</span>
+        <div class="desc">The first large-scale cross-platform dataset spanning 6 operating systems and 3 GUI-centric task domains, plus a general-purpose agent that completes GUI tasks across environments.</div>
+      </div>
+    </div>
+
+    <div class="pub">
+      <div class="venue"><span class="badge">CVPR 2026</span></div>
+      <div class="body">
+        <div class="title">OS-Oracle: A Comprehensive Framework for Cross-Platform GUI Critic Models<a class="code" href="https://arxiv.org/abs/2512.16295" target="_blank" rel="noopener">[arXiv]</a></div>
+        <span class="authors">Zhenyu Wu*, <span class="me">Jingjing Xie*</span>, Zehao Li, Bowen Yang, Qiushi Sun, Zhaoyang Liu, Zhoumianze Liu, Yu Qiao, Xiangyu Yue, Zun Wang, Zichen Ding</span>
+        <div class="desc">A scalable pipeline for synthesizing GUI critic data, a benchmark across Mobile / Web / Desktop, and a two-stage SFT + consistency-preserving GRPO training paradigm.</div>
+      </div>
+    </div>
+
+    <div class="pub">
+      <div class="venue"><span class="badge">CVPR 2026</span></div>
+      <div class="body">
+        <div class="title">MMBench-GUI: Hierarchical Multi-Platform Evaluation Framework for GUI Agents<a class="code" href="https://github.com/open-compass/MMBench-GUI" target="_blank" rel="noopener">[Code]</a></div>
+        <span class="authors">Xuehui Wang*, Zhenyu Wu*, <span class="me">Jingjing Xie*</span>, et al.</span>
+        <div class="desc">A hierarchical framework and multi-platform dataset for systematically assessing GUI agents' capabilities across diverse operating systems.</div>
+      </div>
+    </div>
+
+    <div class="pub">
+      <div class="venue"><span class="badge">Tech Report<br>2025</span></div>
+      <div class="body">
+        <div class="title">Step-GUI Technical Report<a class="code" href="https://arxiv.org/abs/2512.15431" target="_blank" rel="noopener">[arXiv]</a><a class="code" href="https://github.com/stepfun-ai/gelab-zero" target="_blank" rel="noopener">[GitHub]</a></div>
+        <span class="authors">Step-GUI Group</span>
+        <div class="desc">A family of 4B / 8B multimodal models for GUI automation, trained with a self-evolving pipeline and a Calibrated Step Reward System — alongside GUI-MCP and the AndroidDaily real-world mobile benchmark.</div>
+      </div>
+    </div>
+    </details>
+
+    <details class="pubgroup" open>
+    <summary>Model Compression &amp; Acceleration</summary>
+
+    <div class="pub">
+      <div class="venue"><span class="badge">ICML 2025</span></div>
+      <div class="body">
+        <div class="title">GS-Bias: Global-Spatial Bias Learner for Single-Image Test-Time Adaptation of Vision-Language Models<a class="code" href="https://github.com/hzhxmu/GS-Bias" target="_blank" rel="noopener">[Code]</a></div>
+        <span class="authors">Zhaohong Huang, Yuxin Zhang, <span class="me">Jingjing Xie</span>, Fei Chao, Rongrong Ji</span>
+        <div class="desc">Unifies global and regional semantics and optimizes at the logit level, enabling lightweight test-time adaptation with reduced inference overhead.</div>
+      </div>
+    </div>
+
+    <div class="pub">
+      <div class="venue"><span class="badge">AAAI 2025</span></div>
+      <div class="body">
+        <div class="title">TextRefiner: Internal Visual Feature as Efficient Refiner for Vision-Language Models Prompt Tuning<a class="code" href="https://github.com/xjjxmu/TextRefiner" target="_blank" rel="noopener">[Code]</a></div>
+        <span class="authors"><span class="me">Jingjing Xie</span>, Yuxin Zhang, Jun Peng, Zhaohong Huang, Liujuan Cao</span>
+        <div class="desc">Equips text prompts with fine-grained visual concepts via a local cache, feature aggregation, and feature alignment — adding local grounding that global prompt tuning lacks.</div>
+      </div>
+    </div>
+
+    <div class="pub">
+      <div class="venue"><span class="badge">ACM MM 2024</span></div>
+      <div class="body">
+        <div class="title">Advancing Multimodal LLMs with Quantization-Aware Scale Learning for Efficient Adaptation<a class="code" href="https://github.com/xjjxmu/QSLAW" target="_blank" rel="noopener">[Code]</a></div>
+        <span class="authors"><span class="me">Jingjing Xie</span>, Yuxin Zhang, Mingbao Lin, Liujuan Cao, Rongrong Ji</span>
+        <div class="desc">Uses quantization-aware scale learning to fine-tune quantized MLLMs, matching full-precision LLaVA-13B while cutting VL tuning time and GPU cost up to 1.4×.</div>
+      </div>
+    </div>
+
+    <div class="pub">
+      <div class="venue"><span class="badge">CVPR 2024</span></div>
+      <div class="body">
+        <div class="title">UniPTS: A Unified Framework for Proficient Post-Training Sparsity<a class="code" href="https://github.com/xjjxmu/UniPTS" target="_blank" rel="noopener">[Code]</a></div>
+        <span class="authors"><span class="me">Jingjing Xie</span>, Yuxin Zhang, Mingbao Lin, Zhihang Lin, Liujuan Cao, Rongrong Ji</span>
+        <div class="desc">Achieves practical network sparsity from limited data via a global base-decayed KL objective and an evolutionary search — ~1.54× faster training on ResNet-50 / MobileNet-V2 at SOTA.</div>
+      </div>
+    </div>
+    </details>
+
+    <p style="font-size:.82rem;color:var(--muted);margin:10px 0 0">* denotes equal contribution.</p>
+  </section>
+
+  <!-- ============ EXPERIENCE ============ -->
+  <section id="experience">
+    <h2>Experience</h2>
+    <div class="entry">
+      <div class="when">2025.08 – now</div>
+      <div class="what">
+        <div class="org">Research Intern · StepFun</div>
+        <div class="sub">Agentic &amp; multimodal capabilities; contributing to Step 3.5 / 3.7 Flash</div>
+      </div>
+    </div>
+    <div class="entry">
+      <div class="when">2024.10 – 2025.07</div>
+      <div class="what">
+        <div class="org">Research Intern · Shanghai AI Lab</div>
+        <div class="sub">Agentic reasoning models for computer-use scenarios</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 Jingjing Xie · Built with plain HTML &amp; CSS
+  </footer>
+
+</div>
+
+<script>
+  const root = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  const sun = '<svg viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0-5v3m0 14v3M2 12h3m14 0h3M4.2 4.2l2.1 2.1m11.4 11.4 2.1 2.1M19.8 4.2l-2.1 2.1M6.3 17.7l-2.1 2.1" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>';
+  const moon = '<svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
+  function apply(t){
+    root.setAttribute('data-theme', t);
+    btn.innerHTML = t === 'dark' ? sun : moon;
+    localStorage.setItem('theme', t);
+  }
+  const saved = localStorage.getItem('theme') ||
+    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  apply(saved);
+  btn.addEventListener('click', () => apply(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
+</script>
+</body>
+</html>
